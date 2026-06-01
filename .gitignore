@@ -1,0 +1,73 @@
+# Dependencias
+node_modules/
+
+# Build de producción
+dist/
+dist-ssr/
+build/
+
+# Variables de entorno (secretos y config local)
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Caché y artefactos de herramientas
+.vite/
+.cache/
+*.tsbuildinfo
+.eslintcache
+coverage/
+.nyc_output/
+
+# PWA / Service worker generados en build (ya cubiertos por dist/, por si acaso)
+dev-dist/
+sw.js
+workbox-*.js
+
+# Sistema operativo
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Editores e IDEs
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json.example
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.swp
+*~
+
+# Archivos locales temporales
+*.local
+*.tmp
+*.temp
+
+# Capacitor / Ionic nativo (si se agrega en el futuro)
+android/
+ios/
+.capacitor/
+
+# Certificados y claves (nunca subir)
+*.pem
+*.key
+*.p12
+*.pfx

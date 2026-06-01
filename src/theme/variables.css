@@ -1,0 +1,75 @@
+/** Ionic Variables **/
+:root {
+  /** primary: El azul principal de las barras superiores y botones **/
+  --ion-color-primary: #1e56a0;
+  --ion-color-primary-rgb: 30, 86, 160;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #1a4c8c;
+  --ion-color-primary-tint: #3567aa;
+
+  /** secondary: Azul secundario para acentos o estados alternativos **/
+  --ion-color-secondary: #3c637e;
+  --ion-color-secondary-rgb: 60, 99, 126;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #35576f;
+  --ion-color-secondary-tint: #50738b;
+
+  /** tertiary: Gris oscuro/azul marino para textos o bordes secundarios **/
+  --ion-color-tertiary: #f4f5f8;
+  --ion-color-tertiary-rgb: 244, 245, 248;
+  --ion-color-tertiary-contrast: #000000;
+  --ion-color-tertiary-contrast-rgb: 0, 0, 0;
+  --ion-color-tertiary-shade: #d7d8da;
+  --ion-color-tertiary-tint: #f5f6f9;
+
+  /** success: El color verde para los checkmarks de la pantalla final **/
+  --ion-color-success: #2dd36f;
+  --ion-color-success-rgb: 45, 211, 111;
+  --ion-color-success-contrast: #ffffff;
+  --ion-color-success-contrast-rgb: 255, 255, 255;
+  --ion-color-success-shade: #28ba62;
+  --ion-color-success-tint: #42d77d;
+
+  /** warning: El color amarillo/oro para el icono del trofeo de la victoria **/
+  --ion-color-warning: #ffc409;
+  --ion-color-warning-rgb: 255, 196, 9;
+  --ion-color-warning-contrast: #000000;
+  --ion-color-warning-contrast-rgb: 0, 0, 0;
+  --ion-color-warning-shade: #e0ac08;
+  --ion-color-warning-tint: #ffca22;
+
+  /** danger: Rojo para cancelaciones o errores **/
+  --ion-color-danger: #eb445a;
+  --ion-color-danger-rgb: 235, 68, 90;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #cf3c4f;
+  --ion-color-danger-tint: #ed576b;
+
+  /** dark: Textos principales **/
+  --ion-color-dark: #222428;
+  --ion-color-dark-rgb: 34, 36, 40;
+  --ion-color-dark-contrast: #ffffff;
+  --ion-color-dark-contrast-rgb: 255, 255, 255;
+  --ion-color-dark-shade: #1e2023;
+  --ion-color-dark-tint: #383a3e;
+
+  /** light: Fondos de tarjetas y contenedores secundarios **/
+  --ion-color-light: #f4f5f8;
+  --ion-color-light-rgb: 244, 245, 248;
+  --ion-color-light-contrast: #000000;
+  --ion-color-light-contrast-rgb: 0, 0, 0;
+  --ion-color-light-shade: #d7d8da;
+  --ion-color-light-tint: #f5f6f9;
+}
+
+/* Ajustes globales de fondo para que se parezca al fondo limpio de tu maqueta */
+body {
+  background-color: #f9fafb;
+}
+
+ion-content {
+  --background: #f9fafb;
+}
