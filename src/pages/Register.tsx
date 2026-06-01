@@ -1,9 +1,7 @@
-import React, { useState, type ReactNode } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { 
-  IonContent, 
   IonItem, 
-  IonLabel, 
   IonInput, 
   IonButton, 
   IonCard, 
