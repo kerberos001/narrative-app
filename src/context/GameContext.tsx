@@ -65,6 +65,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         },
         body: JSON.stringify(playerData)
       });
+
       if (response.ok) {
         return await response.json();
       }
@@ -101,7 +102,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setProfile(userFullProfile);
 
       const initialPayload = {
-        id: data.id || "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        id: data.id || "",
         name: data.name,
         user_name: data.user_name,
         age: data.age,
@@ -123,7 +124,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const registerUser = async (newData: Omit<UserProfile, 'hitosCumplidos'>): Promise<boolean> => {
     try {
       const payload = {
-        id: "3fa85f64-5717-4562-b3fc-2c963f66afa6", 
+        id: "", 
         ...newData
       };
 
@@ -140,6 +141,9 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         alert("Error al registrar el jugador en el servidor principal.");
         return false;
       }
+
+      const data = await resCreate.json();
+      payload.id = data.id;
 
       const narrativeData = await fetchNarrative(payload);
       

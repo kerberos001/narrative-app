@@ -53,7 +53,7 @@ const Status: React.FC = () => {
 
   useEffect(() => {
     const fetchStatus = async () => {
-      const playerId = currentNarrative?.player_id || "3fa85f64-5717-4562-b3fc-2c963f66afa6";
+      const playerId = currentNarrative?.player_id || "";
       
       if (!profile) {
         setLoading(false);
