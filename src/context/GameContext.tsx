@@ -16,10 +16,11 @@ export interface UserProfile {
   age: number;
   money: number;
   hitosCumplidos: StoryMilestone[]; 
-  final_goal: string,
+  final_goal: string;
   hp: number;       
   energy: number;   
   is_sick: boolean;
+  category_id?: number; // 🛠️ Añadido opcional para el payload de finalización
 }
 
 export interface NarrativeOption {
@@ -37,7 +38,6 @@ export interface CurrentNarrative {
   opciones: NarrativeOption[];
 }
 
-// 1. UNA SOLA INTERFAZ: Aquí declaramos todo el contrato limpio
 interface GameContextType {
   profile: UserProfile | null;
   currentNarrative: CurrentNarrative | null;
@@ -71,7 +71,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
       return null;
     } catch (e) {
-      console.error("Error obteniendo narrativa:", e);
+      console.error("Error obtuvo narrativa:", e);
       return null;
     }
   };
@@ -87,7 +87,6 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (!response.ok) return false;
       const data = await response.json();
 
-      // Inicializamos el perfil con un array de hitos vacío para que la API /story_milestones/ lo rellene
       const userFullProfile: UserProfile = {
         name: data.name,
         user_name: data.user_name,
@@ -97,7 +96,8 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         final_goal: data.final_goal || "",
         hp: data.hp || 100,
         energy: data.energy || 100,
-        is_sick: data.is_sick || false
+        is_sick: data.is_sick || false,
+        category_id: data.category_id || 0
       };
       setProfile(userFullProfile);
 
@@ -150,7 +150,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (narrativeData) {
         setProfile({
           ...newData,
-          hitosCumplidos: [], // Se rellenará dinámicamente en la aventura
+          hitosCumplidos: [],
           hp: 100,
           energy: 100,
           is_sick: false
@@ -166,7 +166,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  // 🛠️ FUNCIÓN INTEGRADA: Avanzar la historia y auditar hitos (POST + POST)
+  // 🛠️ FUNCCIÓN AVANZAR HISTORIA (CON SOPORTE DE LLAMADA FINISH EN PERMADEATH)
   const selectOptionAndContinue = async (selectedOption: NarrativeOption): Promise<boolean | 'DEAD'> => {
     if (!currentNarrative || !profile) return false;
 
@@ -194,15 +194,43 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (!responseContinue.ok) return false;
       await responseContinue.json();
 
-      // 💥 REGLA DE SALUD: Evaluamos el impacto inmediato en los puntos de vida (HP)
-      // Si la opción elegida resta suficiente vida y deja el HP del personaje en 0 o menos...
-      const nuevoHP = (profile.hp ?? 100) + selectedOption.hp; // Si tu interfaz profile no tiene hp, usa: (currentNarrative con las opciones)
+      // Evaluamos el impacto inmediato en los puntos de vida (HP) y el dinero
+      const nuevoHP = (profile.hp ?? 100) + selectedOption.hp;
       const nuevoDinero = profile.money + selectedOption.money;
 
+      // 💥 REGLA DE SALUD CRÍTICA: HP es igual o menor a 0
       if (nuevoHP <= 0) {
-        console.log("💀 El personaje se ha quedado sin puntos de vida.");
-        logout(); // Limpiamos el estado global para obligarlo a empezar de cero
-        return 'DEAD'; // Retornamos este string especial para alertar a la vista
+        console.log("💀 El personaje se ha quedado sin puntos de vida. Notificando fin de juego...");
+        
+        // 🛠️ Ejecutamos el servicio de cambio de estado hacia el endpoint /finish
+        try {
+          const payloadFinish = {
+            id: currentNarrative.player_id,
+            name: profile.name,
+            user_name: profile.user_name,
+            age: profile.age,
+            money: nuevoDinero, // Enviamos el dinero final resultante
+            final_goal: profile.final_goal || "",
+            category_id: profile.category_id || 0
+          };
+
+          // Recuerda usar el nombre correcto mapeado en tus apiRoutes (API_ROUTES.getFinish)
+          await fetch(API_ROUTES.getFinish, {
+            method: 'POST',
+            headers: {
+              'accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payloadFinish)
+          });
+          console.log("✅ Servidor de finalización notificado con éxito.");
+        } catch (finishError) {
+          // Captura un error aislado de red en el finish sin interrumpir el flujo visual de derrota
+          console.error("No se pudo sincronizar el estado /finish con el servidor:", finishError);
+        }
+
+        logout(); // Limpiamos la memoria local
+        return 'DEAD'; // Interrumpimos el flujo y disparamos el IonAlert de derrota
       }
 
       // ----------------------------------------------------------------------
@@ -231,6 +259,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setProfile({
           ...profile,
           money: nuevoDinero,
+          hp: nuevoHP, // Actualizamos también dinámicamente la salud si continúa
           hitosCumplidos: milestonesList
         });
 

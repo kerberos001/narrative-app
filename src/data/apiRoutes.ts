@@ -12,4 +12,6 @@ export const API_ROUTES = {
   continueNarrative: `${BASE_URL}narrative/continue_narrative/`,
   checkMilestones: `${BASE_URL}narrative/story_milestones/`,
   getPlayerStatus: `${BASE_URL}narrative/status/`,
+  getCategory: `${BASE_URL}narrative/category/`,
+  getFinish: `${BASE_URL}narrative/finish/`,
 };
